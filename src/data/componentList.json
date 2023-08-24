@@ -1,0 +1,20 @@
+{
+    "list": [
+        {
+            "name": "Scene800*600",
+            "defaultSize": {
+                "width": 800,
+                "height": 600
+            },
+            "background": "#ff0000"
+        },
+        {
+            "name": "Image",
+            "defaultSize": {
+                "width": 200,
+                "height": 200
+            },
+            "background": "#ffff00"
+        }
+    ]
+}

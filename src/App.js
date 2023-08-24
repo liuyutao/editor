@@ -1,25 +1,51 @@
-import logo from './logo.svg';
+import {useState} from 'react';
+import LeftContainer from './components/LeftContainer'
+import MovingComponent from './components/MovingComponent';
+import Scene from './components/Scene';
+import { leftContainerWidth } from './config';
 import './App.css';
 
+
+
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [componentsInScene, setComponentsInScene] = useState([]);
+    const [movingComponent, setMovingComponent] = useState(null);
+    const [componentIndex, setComponentIndex] = useState(1);
+    function handleAddComponent(component){
+        const {defaultSize: {width, height} } = component;
+        const newComponent = {
+            ...component,
+            width,
+            height,
+            zIndex: componentIndex
+        };
+        componentsInScene.push(newComponent);
+        setMovingComponent(null);
+        setComponentIndex(componentIndex+1);
+    }
+    console.log(componentsInScene)
+
+    function onMouseMove(e) {
+        if(movingComponent) {
+            const {pageX,pageY} = e;
+            movingComponent.left = pageX - leftContainerWidth;
+            movingComponent.top = pageY;
+            setMovingComponent(movingComponent);
+        }
+    }
+
+    function onMouseUp(e) {
+        if(movingComponent) {
+            handleAddComponent(movingComponent)
+        }
+    }
+    return (
+        <div className="App" onMouseMove={onMouseMove} onMouseUp={onMouseUp}>
+            <LeftContainer onAddComponent={handleAddComponent} onMovingComponent={setMovingComponent}/>
+            <Scene componentsInScene={componentsInScene} sceneUpdate={setComponentsInScene} />
+            { movingComponent && <MovingComponent component={movingComponent}  /> }
+        </div>
+    );
 }
 
 export default App;
